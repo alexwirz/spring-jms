@@ -1,2 +1,7 @@
+spring:
+  jms:
+    servicebus:
+      connectionString: ${SERVICE_BUS_CONNECTION_STRING}
+
 destination:
-  integration: integration.q
+  integration: testq

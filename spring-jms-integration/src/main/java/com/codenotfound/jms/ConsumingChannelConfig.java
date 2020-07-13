@@ -1,14 +1,19 @@
 package com.codenotfound.jms;
 
-import javax.jms.ConnectionFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.channel.DirectChannel;
+import org.springframework.integration.dsl.IntegrationFlow;
+import org.springframework.integration.dsl.IntegrationFlows;
+import org.springframework.integration.handler.LoggingHandler;
 import org.springframework.integration.jms.ChannelPublishingJmsMessageListener;
 import org.springframework.integration.jms.JmsMessageDrivenEndpoint;
+import org.springframework.integration.jms.dsl.Jms;
 import org.springframework.jms.listener.SimpleMessageListenerContainer;
+
+import javax.jms.ConnectionFactory;
 
 @Configuration
 public class ConsumingChannelConfig {

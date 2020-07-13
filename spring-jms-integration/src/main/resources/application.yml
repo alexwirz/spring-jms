@@ -4,4 +4,4 @@ spring:
       connectionString: ${SERVICE_BUS_CONNECTION_STRING}
 
 destination:
-  integration: htng-sync
+  integration: testq

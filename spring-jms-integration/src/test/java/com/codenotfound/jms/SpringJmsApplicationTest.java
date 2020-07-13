@@ -51,7 +51,7 @@ public class SpringJmsApplicationTest {
       LOGGER.info("sent message='{}'", message);
     }
 
-    countDownLatchHandler.getLatch().await(10000,
+    countDownLatchHandler.getLatch().await(1200000,
         TimeUnit.MILLISECONDS);
     assertThat(countDownLatchHandler.getLatch().getCount())
         .isEqualTo(0);
