@@ -13,3 +13,6 @@ release.properties
 ##Logs##
 *.log
 *.log.*
+
+##.env
+.env

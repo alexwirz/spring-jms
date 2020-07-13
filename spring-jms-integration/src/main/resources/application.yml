@@ -1,6 +1,7 @@
 spring:
-  activemq:
-    broker-url: tcp://localhost:61616
+  jms:
+    servicebus:
+      connectionString: ${SERVICE_BUS_CONNECTION_STRING}
 
 destination:
-  integration: integration.q
+  integration: htng-sync
