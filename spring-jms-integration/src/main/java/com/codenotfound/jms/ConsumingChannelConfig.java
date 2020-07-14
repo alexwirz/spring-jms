@@ -5,19 +5,14 @@ import com.microsoft.azure.spring.autoconfigure.jms.ConnectionStringResolver;
 import com.microsoft.azure.spring.autoconfigure.jms.ServiceBusKey;
 import org.apache.qpid.jms.JmsConnectionFactory;
 import org.apache.qpid.jms.policy.JmsDefaultPrefetchPolicy;
-import org.apache.qpid.jms.policy.JmsPrefetchPolicy;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.channel.DirectChannel;
-import org.springframework.integration.dsl.IntegrationFlow;
-import org.springframework.integration.dsl.IntegrationFlows;
-import org.springframework.integration.handler.LoggingHandler;
 import org.springframework.integration.jms.ChannelPublishingJmsMessageListener;
 import org.springframework.integration.jms.JmsMessageDrivenEndpoint;
-import org.springframework.integration.jms.dsl.Jms;
 import org.springframework.jms.connection.CachingConnectionFactory;
 import org.springframework.jms.listener.SimpleMessageListenerContainer;
 
@@ -34,7 +29,7 @@ public class ConsumingChannelConfig {
     return new DirectChannel();
   }
 
-  @Bean
+  //@Bean
   @ConditionalOnMissingBean
   public ConnectionFactory jmsConnectionFactory(AzureServiceBusJMSProperties serviceBusJMSProperties) {
     final String connectionString = serviceBusJMSProperties.getConnectionString();
@@ -63,12 +58,33 @@ public class ConsumingChannelConfig {
   public JmsMessageDrivenEndpoint jmsMessageDrivenEndpoint(
       ConnectionFactory connectionFactory) {
     JmsMessageDrivenEndpoint endpoint = new JmsMessageDrivenEndpoint(
-        simpleMessageListenerContainer(connectionFactory),
+        simpleMessageListenerContainer(new SequentialPrefetchPolicy().applyTo(connectionFactory)),
         channelPublishingJmsMessageListener());
     endpoint.setOutputChannel(consumingChannel());
 
     return endpoint;
   }
+
+//  private static ConnectionFactory setupPrefetchForSlowConsumers(ConnectionFactory connectionFactory) {
+//    if(connectionFactory instanceof CachingConnectionFactory) {
+//      final var cachingConnectionFactory = (CachingConnectionFactory) connectionFactory;
+//      setupPrefetchForSlowConsumers((JmsConnectionFactory) cachingConnectionFactory.getTargetConnectionFactory());
+//    }
+//
+////    if(connectionFactory instanceof JmsConnectionFactory) {
+////      setupPrefetchForSlowConsumers((JmsConnectionFactory) connectionFactory);
+////    }
+//
+//    return connectionFactory;
+//  }
+//
+//  private static ConnectionFactory setupPrefetchForSlowConsumers(JmsConnectionFactory jmsConnectionFactory) {
+//    final var singlePrefetchPolicy = new JmsDefaultPrefetchPolicy();
+//    singlePrefetchPolicy.setQueuePrefetch(1);
+//    singlePrefetchPolicy.setQueueBrowserPrefetch(1);
+//    jmsConnectionFactory.setPrefetchPolicy(singlePrefetchPolicy);
+//    return jmsConnectionFactory;
+//  }
 
   @Bean
   public SimpleMessageListenerContainer simpleMessageListenerContainer(
