@@ -58,33 +58,12 @@ public class ConsumingChannelConfig {
   public JmsMessageDrivenEndpoint jmsMessageDrivenEndpoint(
       ConnectionFactory connectionFactory) {
     JmsMessageDrivenEndpoint endpoint = new JmsMessageDrivenEndpoint(
-        simpleMessageListenerContainer(new SequentialPrefetchPolicy().applyTo(connectionFactory)),
+        simpleMessageListenerContainer(connectionFactory),
         channelPublishingJmsMessageListener());
     endpoint.setOutputChannel(consumingChannel());
 
     return endpoint;
   }
-
-//  private static ConnectionFactory setupPrefetchForSlowConsumers(ConnectionFactory connectionFactory) {
-//    if(connectionFactory instanceof CachingConnectionFactory) {
-//      final var cachingConnectionFactory = (CachingConnectionFactory) connectionFactory;
-//      setupPrefetchForSlowConsumers((JmsConnectionFactory) cachingConnectionFactory.getTargetConnectionFactory());
-//    }
-//
-////    if(connectionFactory instanceof JmsConnectionFactory) {
-////      setupPrefetchForSlowConsumers((JmsConnectionFactory) connectionFactory);
-////    }
-//
-//    return connectionFactory;
-//  }
-//
-//  private static ConnectionFactory setupPrefetchForSlowConsumers(JmsConnectionFactory jmsConnectionFactory) {
-//    final var singlePrefetchPolicy = new JmsDefaultPrefetchPolicy();
-//    singlePrefetchPolicy.setQueuePrefetch(1);
-//    singlePrefetchPolicy.setQueueBrowserPrefetch(1);
-//    jmsConnectionFactory.setPrefetchPolicy(singlePrefetchPolicy);
-//    return jmsConnectionFactory;
-//  }
 
   @Bean
   public SimpleMessageListenerContainer simpleMessageListenerContainer(
