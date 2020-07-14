@@ -2,6 +2,7 @@ spring:
   jms:
     servicebus:
       connectionString: ${SERVICE_BUS_CONNECTION_STRING}
+      prefetchCount: 1
 
 destination:
   integration: testq

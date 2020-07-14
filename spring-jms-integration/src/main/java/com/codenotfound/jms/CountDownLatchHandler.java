@@ -21,7 +21,7 @@ public class CountDownLatchHandler implements MessageHandler {
   public void handleMessage(Message<?> message) {
     LOGGER.info("received message='{}'", message);
     try {
-      Thread.sleep(120000);
+      Thread.sleep(20000);
     } catch (InterruptedException e) {
       System.err.println(e);
     }
